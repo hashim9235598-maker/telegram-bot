@@ -1,0 +1,32 @@
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, CallbackContext
+
+BOT_TOKEN = "YOUR_BOT_TOKEN_HERE"
+
+# المواد فقط (عناوين)
+basic_science = ["Anatomy", "Physiology", "Biochemistry", "Pathology", "Microbiology", "Pharmacology", "Behavioral Science"]
+clinical_science = ["Internal Medicine", "Surgery", "Obstetrics & Gynecology", "Pediatrics", "Psychiatry", "Family Medicine", "Emergency Medicine"]
+
+def start(update: Update, context: CallbackContext):
+    keyboard = [
+        [InlineKeyboardButton("Basic Science", callback_data='basic')],
+        [InlineKeyboardButton("Clinical Science", callback_data='clinical')]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    update.message.reply_text("اختر قسم:", reply_markup=reply_markup)
+
+def button(update: Update, context: CallbackContext):
+    query = update.callback_query
+    query.answer()
+    if query.data == 'basic':
+        text = "Basic Science:\n" + "\n".join([f"- {item}" for item in basic_science])
+    elif query.data == 'clinical':
+        text = "Clinical Science:\n" + "\n".join([f"- {item}" for item in clinical_science])
+    query.edit_message_text(text=text)
+
+updater = Updater(BOT_TOKEN)
+updater.dispatcher.add_handler(CommandHandler('start', start))
+updater.dispatcher.add_handler(CallbackQueryHandler(button))
+
+updater.start_polling()
+updater.idle()
