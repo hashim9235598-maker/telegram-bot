@@ -2,7 +2,7 @@ import telebot
 from telebot import types
 import os
 
-TOKEN = os.getenv("BOT_TOKEN")
+TOKEN = os.getenv(" 8401688576:AAGNxP_n_AZ12h68BtdJVRbEZleCSoZ_o7M") 
 bot = telebot.TeleBot(TOKEN)
 
 def main_menu():
